@@ -4,7 +4,7 @@ var canvas;
 var word;
 var letters = 'QWERTYUIOPASDFGHJKLZXCVBNM';
 var colorKey = '#585858';
-var colorMargin = "#612d2d";
+var colorMargin = "red";
 var startX = 200;
 var startY = 300;
 var lon = 35; // Length
@@ -12,8 +12,8 @@ var margin = 20;
 var trackText = "";
 
 // Array 
-var key_array = new Array();
-var letter_array = new Array();
+var keys_array = new Array();
+var letters_array = new Array();
 var words_array = new Array();
 
 // Control Variables
@@ -71,7 +71,7 @@ function designKey() {
 
     ctx.fillStyle = "white";
     ctx.font = "bold 20px Courier";
-    ctx.fillText(this.word, this.x + this.width / 2 - 5, this.y + this.height / 2 + 5);
+    ctx.fillText(this.letter, this.x + this.width / 2 - 5, this.y + this.height / 2 + 5);
 }
 
 // Design Letter and the Box
@@ -96,58 +96,58 @@ function hintFunction(word) {
     let hint = ""; // Creating a new variable local
     switch (word) { // Switch is created to be able to control the tracks according to the word
         case "HORSE": // A case should be made for each word
-            hint = "The horse neighs";
+            hint = " neighs";
             break; // The break is important in each case
         case "ZEBRA":
-            hint = "The zebra neighs";
+            hint = " neighs";
             break;
         case "LIZERDMAN":
-            hint = "The lizerdman eat ñu";
+            hint = " eat ñu";
             break;
         case "SPIDER":
-            hint = "The spider hunt ants";
+            hint = " hunt ants";
             break;
         case "CAT":
-            hint = "The cat sleep";
+            hint = " sleep";
             break;
         case "GIRAFFE":
-            hint = "The giraffe run";
+            hint = " run";
             break;
         case "DOG":
-            hint = "The dog eat";
+            hint = " Always at home";
             break;
         case "PINGUIN":
-            hint = "The pinguin swimming";
+            hint = "swimming";
             break;
         case "PARROT":
             hint = "The parrot fly";
             break;
         case "RABBIT":
-            hint = "The rabbit run";
+            hint = " eat carrot";
             break;
         case "MOUSE":
-            hint = "The mouse run";
+            hint = " eat cheese";
             break;
         case "HAMSTER":
-            hint = "The hamster run";
+            hint = "eat cheese";
             break;
         case "GOLDFISH":
-            hint = "The goldfish ";
+            hint = "ocean ";
             break;
         case "TURTLE":
-            hint = "The turtle eat green";
+            hint = "bohhh";
             break;
         case "DEER":
-            hint = "The deer run because lion want to eat xD";
+            hint = " run because lion want to eat xD";
             break;
         case "GOAT":
-            hint = "The goat same like Deer but with the leopard";
+            hint = " in the mountain";
             break;
         case "TURKEY":
-            hint = "turkey in the kitchen";
+            hint = " in the kitchen";
             break;
         case "SHEEP":
-            hint = "The sheep in the table";
+            hint = " in the table";
             break;
         default:
             hint = "LOL";
@@ -166,19 +166,19 @@ function hintFunction(word) {
 function keyboard() {
     var ren = 0;
     var col = 0;
-    var letter = "";
+    var letter = " ";
     var myLetter;
-    var x = inicioX;
-    var y = inicioY;
+    var x = startX;
+    var y = startY;
 
     for (var i = 0; i < letters.length; i++) {
-        letter = letter.substr(i, 1);
+        letter = letters.substr(i, 1);
         myLetter = new Key(x, y, lon, lon, letter);
         myLetter.design();
-        key_array.push(myLetter);
+        keys_array.push(myLetter);
         x += lon + margin;
-        col++
-        if (col == 2) {
+        col++;
+        if (col == 10) {
             col = 0;
             ren++;
             if (ren == 2) {
@@ -186,7 +186,128 @@ function keyboard() {
             } else {
                 x = startX;
             }
-            y = inicioY + ren * 50;
+
+        }
+        y = startY + ren * 50;
+    }
+}
+
+// Here we get our word randomly and divide it into letters
+
+function designWord() {
+    var p = Math.floor(Math.random() * words_array.length);
+    word = words_array[p];
+
+    hintFunction(word);
+
+    var w = canvas.width;
+    var len = word.length;
+    var ren = 0;
+    var col = 0;
+    var y = 230;
+    var lon = 50;
+    var x = (w - (lon + margin) * len) / 2;
+
+    for (var i = 0; i < word.length; i++) {
+        letter = word.substr(i, 1);
+        myLetter = new Letter(x, y, lon, lon, letter);
+        myLetter.design()
+        letters_array.push(myLetter);
+        x += lon + margin;
+    }
+}
+
+// Draw scaffold and parts of the character as the case may be
+
+function hang(wrongs) {
+    var image = new Image();
+    image.src = "images/ahorcado" + wrongs + ".png";
+    image.onload = function () {
+        ctx.drawImage(image, 390, 0, 230, 230);
+    }
+}
+
+// Adjust coordinates
+
+function set(xx, yy) {
+    var posCanvas = canvas.getBoundingClientRect();
+    var x = xx - posCanvas.left - 15;
+    var y = yy - posCanvas.top - 15;
+    return {
+        x: x,
+        y: y
+    }
+}
+
+function select(e) {
+    var pos = set(e.clientX, e.clientY);
+    var x = pos.x;
+    var y = pos.y;
+    var key;
+    var flag = false;
+
+    for (var i = 0; i < keys_array.length; i++) {
+        key = keys_array[i];
+        if (key.x > 0) {
+            if ((x > key.x) && (x < key.x + key.width) && (y > key.y) && (y < key.y + key.height)) {
+                break;
+            }
+        }
+    }
+    console.log(key);
+    if (i < keys_array.length) {
+        for (var i = 0; i < word.length; i++) {
+            letter = word.substr(i, 1);
+            if (letter == key.letter) { // compare if its success
+                box = letters_array[i];
+                box.designLetter()
+                success++;
+                flag = true;
+            }
+        }
+        if (flag == false) { // If it fails, increase the errors and check if it lost to send the gameover function
+            wrongs++;
+            hang(wrongs);
+            if (wrongs == 5) gameOver(wrongs);
+        }
+        // Borra la tecla de presionado
+        ctx.clearRect(key.x - 1, key.y - 1, key.width + 2, key.height + 2);
+        key.x - 1;
+        // Mira si gana y manda la funcion gameover
+        if (success == word.length) gameOver(wrongs);
+    }
+
+}
+//  We erase the keys and the word with their boxes and send a message depending on the case if it was won or lost
+function gameOver(wrongs) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black";
+
+    ctx.font = "bold 50px Courier";
+    if (wrongs < 5) {
+        ctx.fillText("Very Good, the word is: ", 110, 280);
+    } else {
+        ctx.fillText("Im sorry, the word was: ", 110, 280);
+    }
+    ctx.font = "bold 80px Courier";
+    lon = (canvas.width - (word.length * 48)) / 2;
+    ctx.fillText(word, lon, 380);
+    hang(wrongs);
+}
+
+// 
+
+window.onload = function () {
+    canvas = document.getElementById("screen");
+    if (canvas && canvas.getContext) {
+        ctx = canvas.getContext("2d");
+        if (ctx) {
+            keyboard();
+            designWord();
+            hang(wrongs);
+            canvas.addEventListener("click", select, false);
+        } else {
+            alert("Error loading text")
         }
     }
 }
