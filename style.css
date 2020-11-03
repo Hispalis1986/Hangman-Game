@@ -18,8 +18,7 @@ h1 {
     border-image: linear-gradient(to bottom,
             red,
             rgba(0, 0, 0, 0)) 1 100%;
-    /* border: groove 8px gold;
-    background: lightgreen; */
+
 }
 
 
@@ -111,19 +110,3 @@ html {
     color: rgb(0, 174, 255);
     outline: 0;
 }
-
-/* #button {
-    background-color: red;
-    color: white;
-    font-size: 20px;
-    text-align: center;
-    font-weight: bolder;
-    padding: 3px;
-    border: solid 2px black;
-}
-
-#button:hover {
-
-    font-size: 22px;
-    border: groove 4px red;
-} */

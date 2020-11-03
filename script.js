@@ -108,10 +108,10 @@ function hintFunction(word) {
             hint = " hunt ants";
             break;
         case "CAT":
-            hint = " sleep";
+            hint = "hunt mouse";
             break;
         case "GIRAFFE":
-            hint = " run";
+            hint = "In the jungle";
             break;
         case "DOG":
             hint = " Always at home";
@@ -120,7 +120,7 @@ function hintFunction(word) {
             hint = "swimming";
             break;
         case "PARROT":
-            hint = "The parrot fly";
+            hint = "Fly in the jungle";
             break;
         case "RABBIT":
             hint = " eat carrot";
@@ -135,7 +135,7 @@ function hintFunction(word) {
             hint = "ocean ";
             break;
         case "TURTLE":
-            hint = "bohhh";
+            hint = "hard as stone";
             break;
         case "DEER":
             hint = " run because lion want to eat xD";
@@ -144,10 +144,10 @@ function hintFunction(word) {
             hint = " in the mountain";
             break;
         case "TURKEY":
-            hint = " in the kitchen";
+            hint = "Thanksgiving";
             break;
         case "SHEEP":
-            hint = " in the table";
+            hint = "in the farm";
             break;
         default:
             hint = "LOL";
